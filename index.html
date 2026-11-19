@@ -1,0 +1,1518 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript funkcijas projekta darbam · 9. klase</title>
+<meta name="description" content="Interaktīvi HTML, CSS un JavaScript paraugi 9. klases datorikas projektam.">
+<style>
+:root {
+  color-scheme: light;
+  --ink: #1b203c;
+  --secondary: #505672;
+  --paper: #f4f3fa;
+  --accent: #5134a6;
+  --line: #dcd9ee;
+  --radius: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.58 system-ui, sans-serif; }
+a { color: var(--accent); text-underline-offset: .17em; }
+button, summary { cursor: pointer; font: inherit; }
+:focus-visible { outline: 3px solid #a279ed; outline-offset: 3px; }
+.wrap { width: min(1140px, calc(100% - 36px)); margin-inline: auto; }
+.top { background: #201a38; border-bottom: 1px solid #463962; color: white; }
+.top .wrap { display: flex; gap: 1rem; align-items: center; justify-content: space-between; min-height: 60px; flex-wrap: wrap; padding-block: .6rem; }
+.top a { color: #ece4ff; }
+.brand { font-weight: 700; letter-spacing: .025em; }
+.hero { background: radial-gradient(ellipse at 92% 12%, #554181, transparent 62%), #292044; color: #fff; padding-block: clamp(2.2rem, 6vw, 4.7rem); }
+.hero .wrap { display: grid; grid-template-columns: 1.45fr 1fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { font-size: clamp(2.25rem, 5vw, 4.2rem); max-width: 15ch; line-height: 1.04; letter-spacing: -.045em; margin-bottom: 1rem; }
+.hero p { margin-bottom: 0; color: #eee8ff; }
+.hero .goal { padding: 1.25rem 1.5rem; background: #ffffff12; border: 1px solid #ffffff45; border-radius: var(--radius); }
+.goal h2 { font-size: 1rem; letter-spacing: .04em; color: #ddcffc; margin-bottom: .5rem; }
+.layout { display: grid; grid-template-columns: 235px minmax(0, 1fr); gap: 2rem; align-items: start; padding-block: 2rem 3rem; }
+nav { position: sticky; top: 1rem; padding: 1rem; border: 1px solid var(--line); background: #fff; border-radius: var(--radius); }
+nav h2 { font-size: 1rem; margin: 0 0 .5rem .55rem; }
+nav a { display: block; padding: .38rem .55rem; border-radius: 7px; text-decoration: none; }
+nav a:hover, nav a:focus-visible { background: #ede8fc; text-decoration: underline; }
+article, .panel { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 1.25rem; overflow: hidden; }
+.panel { padding: 1.25rem 1.5rem; }
+.panel > :last-child { margin-bottom: 0; }
+.example-head { padding: 1.35rem 1.5rem 1rem; background: #f0ebff; }
+h2 { line-height: 1.2; font-size: clamp(1.25rem, 3vw, 1.75rem); margin-bottom: .5rem; letter-spacing: -.025em; }
+h3 { font-size: 1rem; margin-bottom: .3rem; }
+.example-head p { margin-bottom: 0; color: #383457; }
+.example-content { padding: 1.15rem 1.5rem 1.45rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem 1.5rem; }
+.demo, .adapt, details { grid-column: 1 / -1; }
+.demo { border: 1px solid #cddfd8; background: #f0f9f5; border-radius: 12px; overflow: hidden; }
+.demo h3 { padding: .65rem 1rem; border-bottom: 1px solid #cddfd8; color: #19543d; margin: 0; }
+iframe { border: 0; display: block; width: 100%; height: 175px; background: #fff; }
+#laiks iframe, #atlase iframe { height: 295px; }
+#summa iframe { height: 220px; }
+#kartosana iframe, #statuss iframe { height: 205px; }
+.notes p, .notes ol { margin-bottom: .75rem; }
+.notes > :last-child { margin-bottom: 0; }
+ol { padding-left: 1.35rem; margin-top: 0; }
+.adapt { margin: 0; padding: .75rem 1rem; border-left: 3px solid #a184dd; background: #f6f3fe; }
+details { border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+summary { padding: .7rem .95rem; font-weight: 650; color: var(--accent); }
+.code-actions { display: flex; flex-wrap: wrap; gap: .55rem; padding: 0 .95rem .7rem; align-items: center; }
+.code-actions button { color: var(--accent); background: #f3eeff; border: 1px solid #d7cbef; border-radius: 7px; padding: .35rem .65rem; }
+pre { overflow: auto; max-height: 32rem; margin: 0; background: #252039; color: #faf7ff; padding: 1rem; border-radius: 0 0 9px 9px; font-size: .86rem; }
+footer { color: var(--secondary); padding: 0 0 1.75rem; }
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; gap: 1rem; }
+  nav { position: static; display: flex; flex-wrap: wrap; gap: .15rem .45rem; }
+  nav h2 { width: 100%; }
+}
+@media (max-width: 555px) {
+  .hero .wrap, .example-content { grid-template-columns: 1fr; }
+  .panel, .example-head, .example-content { padding-inline: 1rem; }
+  #laiks iframe, #atlase iframe { height: 320px; }
+}
+.beginner { grid-column: 1 / -1; padding: 1rem; background: #f8f6ff; border: 1px solid #dcd9ee; border-radius: 12px; }
+.beginner > p, .event-example > p { margin: .7rem 0; }
+.event-example { border-top: 1px solid #dcd9ee; padding-top: 1.1rem; margin-top: 1.4rem; }
+.beginner iframe, .event-example iframe { height: 180px !important; border: 1px solid #dcd9ee; border-radius: 8px; }
+.event-example:last-child iframe { height: 270px !important; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="brand">9. klase · Datorika</span><a href="#resursi">Mācību resursi</a>
+</div></header>
+<section class="hero"><div class="wrap">
+  <div><h1>JavaScript funkcijas projekta darbam</h1>
+  <p>Izmēģini HTML, CSS un JavaScript paraugus un pielāgo izvēlēto funkciju vajadzībai, ko noskaidroji lomu spēles intervijā.</p></div>
+  <section class="goal"><h2>Sasniedzamais rezultāts</h2>
+    <p>Tekstuālā programmēšanas valodā raksta un pārbauda funkcijas konkrēto lietotāja vajadzību apmierināšanai. (T.9.2.6.1., T.9.2.6.2.)</p>
+  </section>
+</div></section>
+<div class="wrap layout">
+<nav aria-label="Funkciju paraugi">
+<h2>Funkciju paraugi</h2><a href="#notikumi">Teorija un notikumi</a>
+<a href="#skaits">Mainīt skaitu</a>
+<a href="#summa">Aprēķināt cenu</a>
+<a href="#statuss">Atzīmēt statusu</a>
+<a href="#laiks">Saglabāt vērtību ar laika zīmogu</a>
+<a href="#atlase">Atlasīt ierakstus</a>
+<a href="#kartosana">Kārtot pēc termiņa</a>
+<a href="#izskats">Mainīt izskatu</a>
+<a href="#detalas">Atvērt papildu informāciju</a>
+</nav>
+<main>
+<section class="panel">
+<h2>Darbs ar paraugu</h2>
+<ol>
+<li>Vienā teikumā pieraksti, ko lietotājs vēlas izdarīt un ko viņš vēlas pēc tam redzēt.</li>
+<li>Sāc ar sadaļu “Teorija un notikumi”, tad katrā paraugā izmēģini pamata kodu un salīdzini ar pilno variantu.</li><li>Izmēģini atbilstošu paraugu. Saglabā tā kodu kā HTML failu, atver to pārlūkā un pielāgo datus, tekstus un noteikumus savai situācijai.</li>
+<li>Pieraksti pārbaudes darbību, gaidīto un faktisko rezultātu. Ja tie atšķiras, izlabo kodu un pārbaudi vēlreiz.</li>
+</ol>
+</section>
+<section class="panel" id="notikumi"><h2>Notikumi mājas lapā</h2><p>Notikums ir darbība vai brīdis, uz kuru pārlūks var reaģēt, izsaucot funkciju.</p><h3>Notikumu piemēri</h3><ul><li>Lietotājs noklikšķina uz HTML pogas.</li><li>Tīmekļa lapa ir pabeigusi ielādi.</li><li>Lietotājs uzved peles kursoru uz elementa.</li><li>Lietotājs nospiež tastatūras taustiņu.</li><li>Mainās HTML ievades lauka vērtība.</li></ul><p><code>onclick="apstiprini()"</code> sasaista notikumu ar funkcijas izsaukumu. Funkciju apraksta JavaScript daļā ar <code>function apstiprini() { … }</code>.</p><p><code>oninput</code> reaģē uz katru ievades izmaiņu. <code>onchange</code> teksta laukā parasti notiek pēc vērtības maiņas un iziešanas no lauka, bet izvēlnē — pēc izvēles maiņas.</p><section class="event-example"><h3>Ievade · oninput</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs uzreiz redz ievadīto tekstu.</p><iframe title="Ievade · oninput" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Teksts &lt;input oninput=&quot;paradi(this.value)&quot;&gt;&lt;/label&gt;&lt;p id=&quot;izvade&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradi(teksts) {
+  // oninput notiek pēc katras lietotāja ievades izmaiņas.
+  document.getElementById(&quot;izvade&quot;).textContent = teksts;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Ievades lauks un izvades rindkopa.</p><p><strong>Darbība un izveides gaita.</strong> Ievades notikumā nodod funkcijai lauka vērtību. Funkcija to ieraksta rindkopā.</p><p><strong>Pārbaude.</strong> Ieraksti AB → AB; izdzēs B → A.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-1">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Teksts &lt;input oninput=&quot;paradi(this.value)&quot;&gt;&lt;/label&gt;&lt;p id=&quot;izvade&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradi(teksts) {
+  // oninput notiek pēc katras lietotāja ievades izmaiņas.
+  document.getElementById(&quot;izvade&quot;).textContent = teksts;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Peles pogas nospiešana · onmousedown</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs redz, ka peles poga ir nospiesta.</p><iframe title="Peles pogas nospiešana · onmousedown" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmousedown=&quot;nospied()&quot;&gt;Nospied un turi&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida nospiešanu&lt;/p&gt;
+&lt;script&gt;
+function nospied() {
+  // Reaģē uz peles pogas nospiešanas brīdi.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Peles poga nospiesta.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un paziņojuma rindkopa.</p><p><strong>Darbība un izveides gaita.</strong> Pogai pievieno onmousedown. Funkcijā nomaini rindkopas tekstu.</p><p><strong>Pārbaude.</strong> Nospied un turi peles pogu uz pogas → teksts parādās pirms atlaišanas.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-2">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmousedown=&quot;nospied()&quot;&gt;Nospied un turi&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida nospiešanu&lt;/p&gt;
+&lt;script&gt;
+function nospied() {
+  // Reaģē uz peles pogas nospiešanas brīdi.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Peles poga nospiesta.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Peles pogas atlaišana · onmouseup</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs redz, kad atlaidis peles pogu.</p><iframe title="Peles pogas atlaišana · onmouseup" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmouseup=&quot;atlaid()&quot;&gt;Nospied un atlaid&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida atlaišanu&lt;/p&gt;
+&lt;script&gt;
+function atlaid() {
+  // Notiek, ja peles pogu atlaiž virs šī elementa.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Peles poga atlaista.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un paziņojuma rindkopa.</p><p><strong>Darbība un izveides gaita.</strong> Pogai pievieno onmouseup. Funkcijā parādi atlaišanas paziņojumu.</p><p><strong>Pārbaude.</strong> Nospied un turi → teksts nemainās; atlaid virs pogas → paziņojums.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-3">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmouseup=&quot;atlaid()&quot;&gt;Nospied un atlaid&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida atlaišanu&lt;/p&gt;
+&lt;script&gt;
+function atlaid() {
+  // Notiek, ja peles pogu atlaiž virs šī elementa.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Peles poga atlaista.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Klikšķis · onclick</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs saņem apstiprinājumu pēc pogas aktivizēšanas.</p><iframe title="Klikšķis · onclick" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;apstiprini()&quot;&gt;Apstiprināt&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida darbību&lt;/p&gt;
+&lt;script&gt;
+function apstiprini() {
+  // Pogu var aktivizēt ar peli vai tastatūru.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Apstiprināts!&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un rezultāta teksts.</p><p><strong>Darbība un izveides gaita.</strong> Pogai pievieno onclick. Funkcija izvada apstiprinājumu.</p><p><strong>Pārbaude.</strong> Klikšķini → apstiprinājums. Ar Tab pārej uz pogu un nospied Enter → tas pats.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-4">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;apstiprini()&quot;&gt;Apstiprināt&lt;/button&gt;&lt;p id=&quot;zina&quot;&gt;Gaida darbību&lt;/p&gt;
+&lt;script&gt;
+function apstiprini() {
+  // Pogu var aktivizēt ar peli vai tastatūru.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Apstiprināts!&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Kursors virs elementa · onmouseenter</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs saņem norādi, uzvedot kursoru uz elementa vai fokusējot to.</p><iframe title="Kursors virs elementa · onmouseenter" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;div tabindex=&quot;0&quot; onmouseenter=&quot;paradiNoradi()&quot; onfocus=&quot;paradiNoradi()&quot;&gt;Uzved kursoru vai izvēlies ar Tab.&lt;/div&gt;&lt;p id=&quot;zina&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradiNoradi() {
+  // Vienu funkciju var izsaukt dažādi notikumi.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Šeit ir papildu norāde.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Fokusējama kartīte un norādes teksts.</p><p><strong>Darbība un izveides gaita.</strong> Piesaisti vienu funkciju onmouseenter un onfocus notikumiem.</p><p><strong>Pārbaude.</strong> Uzved kursoru → norāde; pārlādē un ar Tab fokusē kartīti → norāde.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-5">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;div tabindex=&quot;0&quot; onmouseenter=&quot;paradiNoradi()&quot; onfocus=&quot;paradiNoradi()&quot;&gt;Uzved kursoru vai izvēlies ar Tab.&lt;/div&gt;&lt;p id=&quot;zina&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradiNoradi() {
+  // Vienu funkciju var izsaukt dažādi notikumi.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Šeit ir papildu norāde.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Tastatūra · onkeydown</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs redz nospiestā taustiņa nosaukumu.</p><iframe title="Tastatūra · onkeydown" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Nospied taustiņu &lt;input onkeydown=&quot;paradiTaustinu(event.key)&quot;&gt;&lt;/label&gt;&lt;p id=&quot;taustins&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradiTaustinu(nosaukums) {
+  // event.key satur nospiestā taustiņa nosaukumu.
+  document.getElementById(&quot;taustins&quot;).textContent = nosaukums;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Ievades lauks un rezultāta teksts.</p><p><strong>Darbība un izveides gaita.</strong> Notikumā nodod funkcijai event.key. Parādi saņemto vērtību.</p><p><strong>Pārbaude.</strong> Fokusē lauku un nospied A, tad Enter → redzams a vai A, pēc tam Enter.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-6">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Nospied taustiņu &lt;input onkeydown=&quot;paradiTaustinu(event.key)&quot;&gt;&lt;/label&gt;&lt;p id=&quot;taustins&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function paradiTaustinu(nosaukums) {
+  // event.key satur nospiestā taustiņa nosaukumu.
+  document.getElementById(&quot;taustins&quot;).textContent = nosaukums;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Lapas ielāde · onload</h3><p><strong>Lietotāja vajadzība.</strong> Lietotājs redz, ka parauga lapa ir ielādēta.</p><iframe title="Lapas ielāde · onload" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body onload=&quot;sakums()&quot;&gt;
+&lt;p id=&quot;zina&quot;&gt;Notiek ielāde…&lt;/p&gt;
+&lt;script&gt;
+function sakums() {
+  // onload šo funkciju izsauc pēc lapas ielādes.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Lapa gatava darbam.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> body ar onload un paziņojuma rindkopa.</p><p><strong>Darbība un izveides gaita.</strong> Pievieno onload sākuma body tagam. Izsauktajā funkcijā parādi gatavības tekstu.</p><p><strong>Pārbaude.</strong> Atver vai pārlādē paraugu → Lapa gatava darbam.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikums-7">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body onload=&quot;sakums()&quot;&gt;
+&lt;p id=&quot;zina&quot;&gt;Notiek ielāde…&lt;/p&gt;
+&lt;script&gt;
+function sakums() {
+  // onload šo funkciju izsauc pēc lapas ielādes.
+  document.getElementById(&quot;zina&quot;).textContent = &quot;Lapa gatava darbam.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section><section class="event-example"><h3>Salīdzini notikumu secību</h3><p>Nospied peles pogu, turi to un atlaid virs tās pašas pogas. Pārbaudi secību — onmousedown, onmouseup, onclick. Ar Tab un Enter aktivizēta poga reģistrē onclick. Peles piemēriem izmanto peli vai skārienpaliktni.</p><iframe title="Notikumu secība" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmousedown=&quot;pieraksti(&#x27;onmousedown&#x27;)&quot; onmouseup=&quot;pieraksti(&#x27;onmouseup&#x27;)&quot; onclick=&quot;pieraksti(&#x27;onclick&#x27;)&quot;&gt;Nospied, turi un atlaid&lt;/button&gt;&lt;button onclick=&quot;notiri()&quot;&gt;Notīrīt&lt;/button&gt;&lt;ol id=&quot;vesture&quot;&gt;&lt;/ol&gt;
+&lt;script&gt;
+function pieraksti(notikums) {
+  // Saglabā katru notikumu atsevišķā rindā.
+  const rinda = document.createElement(&quot;li&quot;);
+  rinda.textContent = notikums;
+  document.getElementById(&quot;vesture&quot;).append(rinda);
+}
+function notiri() {
+  document.getElementById(&quot;vesture&quot;).textContent = &quot;&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="notikumu-seciba">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onmousedown=&quot;pieraksti(&#x27;onmousedown&#x27;)&quot; onmouseup=&quot;pieraksti(&#x27;onmouseup&#x27;)&quot; onclick=&quot;pieraksti(&#x27;onclick&#x27;)&quot;&gt;Nospied, turi un atlaid&lt;/button&gt;&lt;button onclick=&quot;notiri()&quot;&gt;Notīrīt&lt;/button&gt;&lt;ol id=&quot;vesture&quot;&gt;&lt;/ol&gt;
+&lt;script&gt;
+function pieraksti(notikums) {
+  // Saglabā katru notikumu atsevišķā rindā.
+  const rinda = document.createElement(&quot;li&quot;);
+  rinda.textContent = notikums;
+  document.getElementById(&quot;vesture&quot;).append(rinda);
+}
+function notiri() {
+  document.getElementById(&quot;vesture&quot;).textContent = &quot;&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details></section></section><article id="skaits">
+<header class="example-head"><h2>Mainīt skaitu</h2><p>Lietotājs vēlas ar pogām mainīt daudzumu un uzreiz redzēt rezultātu.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Katrs klikšķis palielina skaitu par vienu.</p><iframe title="Pamata piemērs — skaits" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;palielini()&quot;&gt;+1&lt;/button&gt;&lt;output id=&quot;skaits&quot;&gt;0&lt;/output&gt;
+&lt;script&gt;
+let skaits = 0;
+function palielini() {
+  // Katru reizi pieskaita vienu.
+  skaits = skaits + 1;
+  document.getElementById(&quot;skaits&quot;).textContent = skaits;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga, rezultāta lauks un mainīgais.</p><p><strong>Izveides gaita.</strong> Izveido pogu un rezultāta lauku. Mainīgajam piešķir 0. Funkcijā pieskaiti 1 un parādi vērtību.</p><p><strong>Pārbaude.</strong> Nospied pogu trīsreiz → 3.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="skaits-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;palielini()&quot;&gt;+1&lt;/button&gt;&lt;output id=&quot;skaits&quot;&gt;0&lt;/output&gt;
+&lt;script&gt;
+let skaits = 0;
+function palielini() {
+  // Katru reizi pieskaita vienu.
+  skaits = skaits + 1;
+  document.getElementById(&quot;skaits&quot;).textContent = skaits;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Mainīt skaitu — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Mainīt skaitu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;mainiSkaitu(-1)&quot; aria-label=&quot;Samazināt&quot;&gt;−&lt;/button&gt;
+&lt;output id=&quot;skaits&quot; aria-live=&quot;polite&quot;&gt;0&lt;/output&gt;
+&lt;button onclick=&quot;mainiSkaitu(1)&quot; aria-label=&quot;Palielināt&quot;&gt;+&lt;/button&gt;
+&lt;script&gt;
+let skaits = 0;
+
+function mainiSkaitu(izmaina) {
+  // Skaits nedrīkst būt mazāks par nulli.
+  skaits = Math.max(0, skaits + izmaina);
+  document.getElementById(&quot;skaits&quot;).textContent = skaits;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Divas pogas un rezultāta elements &lt;output&gt;.</p>
+    <h3>Funkcijas darbība</h3><p>Katra poga izsauc vienu funkciju ar citu argumentu. Funkcija pieskaita izmaiņu un saglabā skaitu vismaz 0.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Izveido pogas un rezultāta lauku.</li><li>Mainīgajā saglabā sākuma vērtību 0.</li><li>Uzraksti funkciju ar parametru un izsauc to ar 1 vai −1.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Nospied + divreiz → 2.</li><li>Nospied − trīsreiz → 0.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Pasūtījuma daudzumam maini pogu aprakstus. Punktu skaitīšanai pievieno pogu ar citu argumentu.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Mainīt skaitu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;mainiSkaitu(-1)&quot; aria-label=&quot;Samazināt&quot;&gt;−&lt;/button&gt;
+&lt;output id=&quot;skaits&quot; aria-live=&quot;polite&quot;&gt;0&lt;/output&gt;
+&lt;button onclick=&quot;mainiSkaitu(1)&quot; aria-label=&quot;Palielināt&quot;&gt;+&lt;/button&gt;
+&lt;script&gt;
+let skaits = 0;
+
+function mainiSkaitu(izmaina) {
+  // Skaits nedrīkst būt mazāks par nulli.
+  skaits = Math.max(0, skaits + izmaina);
+  document.getElementById(&quot;skaits&quot;).textContent = skaits;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="summa">
+<header class="example-head"><h2>Aprēķināt cenu</h2><p>Lietotājs vēlas uzreiz redzēt kopējo cenu pēc daudzuma vai varianta maiņas.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Ievadīto daudzumu reizina ar cenu 5 €.</p><iframe title="Pamata piemērs — summa" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Daudzums &lt;input id=&quot;daudzums&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; required value=&quot;1&quot; oninput=&quot;rekini()&quot;&gt;&lt;/label&gt;&lt;p id=&quot;summa&quot;&gt;5 €&lt;/p&gt;
+&lt;script&gt;
+function rekini() {
+  const lauks = document.getElementById(&quot;daudzums&quot;);
+  const summa = document.getElementById(&quot;summa&quot;);
+  // HTML noteikumi pārbauda, vai ievadīts vesels skaitlis no 0.
+  if (lauks.checkValidity()) {
+    summa.textContent = Number(lauks.value) * 5 + &quot; €&quot;;
+  } else {
+    summa.textContent = &quot;Ievadi veselu skaitli no 0.&quot;;
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Daudzuma ievades lauks un rezultāta lauks.</p><p><strong>Izveides gaita.</strong> Izveido skaitļa lauku. Ar oninput izsauc funkciju. Pārbaudi lauku un reizini daudzumu ar 5.</p><p><strong>Pārbaude.</strong> Ievadi 3 → 15 €; 0 → 0 €; iztukšo lauku → norāde.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="summa-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Daudzums &lt;input id=&quot;daudzums&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; required value=&quot;1&quot; oninput=&quot;rekini()&quot;&gt;&lt;/label&gt;&lt;p id=&quot;summa&quot;&gt;5 €&lt;/p&gt;
+&lt;script&gt;
+function rekini() {
+  const lauks = document.getElementById(&quot;daudzums&quot;);
+  const summa = document.getElementById(&quot;summa&quot;);
+  // HTML noteikumi pārbauda, vai ievadīts vesels skaitlis no 0.
+  if (lauks.checkValidity()) {
+    summa.textContent = Number(lauks.value) * 5 + &quot; €&quot;;
+  } else {
+    summa.textContent = &quot;Ievadi veselu skaitli no 0.&quot;;
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Aprēķināt cenu — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Aprēķināt cenu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Daudzums
+  &lt;input id=&quot;daudzums&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; required
+         value=&quot;1&quot; oninput=&quot;aprekini()&quot;&gt;
+&lt;/label&gt;
+&lt;label&gt;Variants
+  &lt;select id=&quot;cena&quot; onchange=&quot;aprekini()&quot;&gt;
+    &lt;option value=&quot;5&quot;&gt;Pamata (5 €)&lt;/option&gt;
+    &lt;option value=&quot;8&quot;&gt;Papildināts (8 €)&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/label&gt;
+&lt;p&gt;Kopā &lt;output id=&quot;summa&quot; aria-live=&quot;polite&quot;&gt;5.00 €&lt;/output&gt;&lt;/p&gt;
+&lt;script&gt;
+function aprekini() {
+  const lauks = document.getElementById(&quot;daudzums&quot;);
+  const summa = document.getElementById(&quot;summa&quot;);
+
+  // min, step un required nosaka atļauto ievadi.
+  if (!lauks.validity.valid) {
+    summa.textContent = &quot;Ievadi veselu skaitli no 0.&quot;;
+    return;
+  }
+
+  const cena = Number(document.getElementById(&quot;cena&quot;).value);
+  summa.textContent = (lauks.valueAsNumber * cena).toFixed(2) + &quot; €&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Skaitļa lauks, izvēlne &lt;select&gt;, abu lauku etiķetes un &lt;output&gt;.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija nolasa daudzumu un izvēlētā varianta cenu. Derīgas ievades gadījumā tā reizina abas vērtības un parāda summu.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Izvēlnes variantu value atribūtos ieraksti cenas.</li><li>Piesaisti aprēķinu ievades notikumam input un izvēlnes notikumam change.</li><li>Pārbaudi lauku un parādi summu vai paziņojumu.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Ievadi 3 un izvēlies variantu par 8 € → 24.00 €.</li><li>Ievadi 0 → 0.00 €.</li><li>Iztukšo lauku vai ievadi −1 → paziņojums.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Diviem preču veidiem izmanto divus daudzuma laukus un saskaiti abu veidu starpsummas.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Aprēķināt cenu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Daudzums
+  &lt;input id=&quot;daudzums&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; required
+         value=&quot;1&quot; oninput=&quot;aprekini()&quot;&gt;
+&lt;/label&gt;
+&lt;label&gt;Variants
+  &lt;select id=&quot;cena&quot; onchange=&quot;aprekini()&quot;&gt;
+    &lt;option value=&quot;5&quot;&gt;Pamata (5 €)&lt;/option&gt;
+    &lt;option value=&quot;8&quot;&gt;Papildināts (8 €)&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/label&gt;
+&lt;p&gt;Kopā &lt;output id=&quot;summa&quot; aria-live=&quot;polite&quot;&gt;5.00 €&lt;/output&gt;&lt;/p&gt;
+&lt;script&gt;
+function aprekini() {
+  const lauks = document.getElementById(&quot;daudzums&quot;);
+  const summa = document.getElementById(&quot;summa&quot;);
+
+  // min, step un required nosaka atļauto ievadi.
+  if (!lauks.validity.valid) {
+    summa.textContent = &quot;Ievadi veselu skaitli no 0.&quot;;
+    return;
+  }
+
+  const cena = Number(document.getElementById(&quot;cena&quot;).value);
+  summa.textContent = (lauks.valueAsNumber * cena).toFixed(2) + &quot; €&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="statuss">
+<header class="example-head"><h2>Atzīmēt statusu</h2><p>Lietotājs vēlas atzīmēt paveikto un redzēt, cik ierakstu vēl jāizpilda.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Atzīme nosaka, vai darbs ir paveikts.</p><iframe title="Pamata piemērs — statuss" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; onchange=&quot;mainiStatusu(this.checked)&quot;&gt; Sagatavots&lt;/label&gt;&lt;p id=&quot;statuss&quot;&gt;Vēl jāpaveic&lt;/p&gt;
+&lt;script&gt;
+function mainiStatusu(irAtzimets) {
+  const statuss = document.getElementById(&quot;statuss&quot;);
+  // checked ir true, ja rūtiņa atzīmēta.
+  if (irAtzimets) {
+    statuss.textContent = &quot;Paveikts&quot;;
+  } else {
+    statuss.textContent = &quot;Vēl jāpaveic&quot;;
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Viena rūtiņa ar etiķeti un statusa teksts.</p><p><strong>Izveides gaita.</strong> Izveido rūtiņu. Nodod funkcijai this.checked. Ar if izvēlies statusa tekstu.</p><p><strong>Pārbaude.</strong> Atzīmē → Paveikts; noņem atzīmi → Vēl jāpaveic.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="statuss-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; onchange=&quot;mainiStatusu(this.checked)&quot;&gt; Sagatavots&lt;/label&gt;&lt;p id=&quot;statuss&quot;&gt;Vēl jāpaveic&lt;/p&gt;
+&lt;script&gt;
+function mainiStatusu(irAtzimets) {
+  const statuss = document.getElementById(&quot;statuss&quot;);
+  // checked ir true, ja rūtiņa atzīmēta.
+  if (irAtzimets) {
+    statuss.textContent = &quot;Paveikts&quot;;
+  } else {
+    statuss.textContent = &quot;Vēl jāpaveic&quot;;
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Atzīmēt statusu — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atzīmēt statusu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+.pabeigts { color: #176247; font-weight: bold; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Sagatavot materiālus&lt;/label&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Pārbaudīt saturu&lt;/label&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Iesniegt darbu&lt;/label&gt;
+&lt;p&gt;Paveikts &lt;output id=&quot;paveikts&quot; aria-live=&quot;polite&quot;&gt;0 no 3&lt;/output&gt;&lt;/p&gt;
+&lt;script&gt;
+function atjauno() {
+  const darbi = document.querySelectorAll(&quot;.darbs&quot;);
+  let skaits = 0;
+
+  for (const darbs of darbi) {
+    if (darbs.checked) {
+      skaits += 1;
+    }
+    // Klase ir uz etiķetes tik ilgi, kamēr rūtiņa ir atzīmēta.
+    darbs.parentElement.classList.toggle(&quot;pabeigts&quot;, darbs.checked);
+  }
+
+  document.getElementById(&quot;paveikts&quot;).textContent =
+    skaits + &quot; no &quot; + darbi.length;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Atzīmējamas rūtiņas ar etiķetēm, rezultāta elements un CSS klase izcēlumam.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija nolasa rūtiņu stāvokli, saskaita atzīmētās un piešķir izpildītajiem ierakstiem CSS klasi.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Izveido rūtiņas ar kopīgu klasi.</li><li>Ar checked nosaki, kura rūtiņa ir atzīmēta.</li><li>Atjauno kopsavilkumu un rindas klasi katrā change notikumā.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Atzīmē vienu rūtiņu → 1 no 3 un rindas izcēlums.</li><li>Noņem atzīmi → 0 no 3 un izcēlums pazūd.</li><li>Atzīmē visas → 3 no 3.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Zināmu atzīmi var izmantot mantu sarakstam, darba daļām vai paziņojumiem. Ja vajag trīs statusus, izmanto izvēlni.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atzīmēt statusu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+.pabeigts { color: #176247; font-weight: bold; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Sagatavot materiālus&lt;/label&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Pārbaudīt saturu&lt;/label&gt;
+&lt;label&gt;&lt;input class=&quot;darbs&quot; type=&quot;checkbox&quot; onchange=&quot;atjauno()&quot;&gt; Iesniegt darbu&lt;/label&gt;
+&lt;p&gt;Paveikts &lt;output id=&quot;paveikts&quot; aria-live=&quot;polite&quot;&gt;0 no 3&lt;/output&gt;&lt;/p&gt;
+&lt;script&gt;
+function atjauno() {
+  const darbi = document.querySelectorAll(&quot;.darbs&quot;);
+  let skaits = 0;
+
+  for (const darbs of darbi) {
+    if (darbs.checked) {
+      skaits += 1;
+    }
+    // Klase ir uz etiķetes tik ilgi, kamēr rūtiņa ir atzīmēta.
+    darbs.parentElement.classList.toggle(&quot;pabeigts&quot;, darbs.checked);
+  }
+
+  document.getElementById(&quot;paveikts&quot;).textContent =
+    skaits + &quot; no &quot; + darbi.length;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="laiks">
+<header class="example-head"><h2>Saglabāt vērtību ar laika zīmogu</h2><p>Lietotājs vēlas redzēt aktuālo vērtību un laiku, kad tā pēdējoreiz mainīta.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Poga fiksē brīdi, kad lietotājs apstiprina pārbaudi.</p><iframe title="Pamata piemērs — laiks" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;fikseLaiku()&quot;&gt;Pārbaude veikta&lt;/button&gt;&lt;p id=&quot;laiks&quot;&gt;Vēl nav pārbaudīts&lt;/p&gt;
+&lt;script&gt;
+function fikseLaiku() {
+  // Date iegūst ierīces pašreizējo laiku.
+  const tagad = new Date();
+  document.getElementById(&quot;laiks&quot;).textContent =
+    tagad.toLocaleString(&quot;lv-LV&quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un laika attēlošanas vieta.</p><p><strong>Izveides gaita.</strong> Izveido pogu un teksta lauku. Funkcijā iegūsti Date objektu un parādi laiku.</p><p><strong>Pārbaude.</strong> Nospied → pašreizējais laiks; pagaidi un nospied vēlreiz → jauns laiks.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="laiks-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;fikseLaiku()&quot;&gt;Pārbaude veikta&lt;/button&gt;&lt;p id=&quot;laiks&quot;&gt;Vēl nav pārbaudīts&lt;/p&gt;
+&lt;script&gt;
+function fikseLaiku() {
+  // Date iegūst ierīces pašreizējo laiku.
+  const tagad = new Date();
+  document.getElementById(&quot;laiks&quot;).textContent =
+    tagad.toLocaleString(&quot;lv-LV&quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Saglabāt vērtību ar laika zīmogu — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Saglabāt vērtību ar laika zīmogu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Jaunā vieta &lt;input id=&quot;ievade&quot; type=&quot;text&quot;&gt;&lt;/label&gt;
+&lt;button onclick=&quot;saglaba()&quot;&gt;Apstiprināt izmaiņu&lt;/button&gt;
+&lt;p&gt;Vieta &lt;strong id=&quot;vieta&quot;&gt;Zāle A&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Pēdējā izmaiņa &lt;time id=&quot;laiks&quot;&gt;—&lt;/time&gt;&lt;/p&gt;
+&lt;p id=&quot;zina&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function saglaba() {
+  const jaunaVieta = document.getElementById(&quot;ievade&quot;).value.trim();
+  const vieta = document.getElementById(&quot;vieta&quot;);
+  const zina = document.getElementById(&quot;zina&quot;);
+
+  if (jaunaVieta === &quot;&quot;) {
+    zina.textContent = &quot;Ievadi vietu.&quot;;
+    return;
+  }
+
+  if (jaunaVieta === vieta.textContent) {
+    zina.textContent = &quot;Vieta jau ir aktuāla.&quot;;
+    return;
+  }
+
+  // Paņem ierīces laiku tieši pēc veiksmīgas izmaiņas.
+  const tagad = new Date();
+  const laiks = document.getElementById(&quot;laiks&quot;);
+  vieta.textContent = jaunaVieta;
+  laiks.dateTime = tagad.toISOString();
+  laiks.textContent = tagad.toLocaleString(&quot;lv-LV&quot;);
+  zina.textContent = &quot;Vieta atjaunota.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Ievades lauks, poga, vieta aktuālajai vērtībai, laika zīmogam un paziņojumam.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija noņem liekās atstarpes un pārbauda ievadi. Tikai derīga, mainīta vērtība atjauno parādīto tekstu un laika zīmogu. Vērtība paliek redzama līdz lapas pārlādei.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Izveido ievades lauku un atsevišķu vietu apstiprinātajai vērtībai.</li><li>Salīdzini ievadi ar pašreiz redzamo vērtību.</li><li>Veiksmīgas izmaiņas brīdī izveido Date objektu un parādi vietējo laiku.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Ievadi “Zāle B” → redzama jaunā vieta un pašreizējais laiks.</li><li>Nospied pogu vēlreiz → laiks saglabājas.</li><li>Ievadi tikai atstarpes → parādās norāde un vērtība saglabājas.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Vietas vietā izmanto vienu svarīgu lauku no intervijas, piemēram, maiņas uzdevumu vai apstiprinātās versijas nosaukumu.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Saglabāt vērtību ar laika zīmogu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Jaunā vieta &lt;input id=&quot;ievade&quot; type=&quot;text&quot;&gt;&lt;/label&gt;
+&lt;button onclick=&quot;saglaba()&quot;&gt;Apstiprināt izmaiņu&lt;/button&gt;
+&lt;p&gt;Vieta &lt;strong id=&quot;vieta&quot;&gt;Zāle A&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Pēdējā izmaiņa &lt;time id=&quot;laiks&quot;&gt;—&lt;/time&gt;&lt;/p&gt;
+&lt;p id=&quot;zina&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function saglaba() {
+  const jaunaVieta = document.getElementById(&quot;ievade&quot;).value.trim();
+  const vieta = document.getElementById(&quot;vieta&quot;);
+  const zina = document.getElementById(&quot;zina&quot;);
+
+  if (jaunaVieta === &quot;&quot;) {
+    zina.textContent = &quot;Ievadi vietu.&quot;;
+    return;
+  }
+
+  if (jaunaVieta === vieta.textContent) {
+    zina.textContent = &quot;Vieta jau ir aktuāla.&quot;;
+    return;
+  }
+
+  // Paņem ierīces laiku tieši pēc veiksmīgas izmaiņas.
+  const tagad = new Date();
+  const laiks = document.getElementById(&quot;laiks&quot;);
+  vieta.textContent = jaunaVieta;
+  laiks.dateTime = tagad.toISOString();
+  laiks.textContent = tagad.toLocaleString(&quot;lv-LV&quot;);
+  zina.textContent = &quot;Vieta atjaunota.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="atlase">
+<header class="example-head"><h2>Atlasīt ierakstus</h2><p>Lietotājs vēlas garā sarakstā ātri atrast piemērotus ierakstus.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Rāda rindas, kuru tekstā ir meklētie burti.</p><iframe title="Pamata piemērs — atlase" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Meklēt &lt;input oninput=&quot;mekle(this.value)&quot;&gt;&lt;/label&gt;&lt;ul id=&quot;saraksts&quot;&gt;&lt;li&gt;Mazā zāle&lt;/li&gt;&lt;li&gt;Lielā zāle&lt;/li&gt;&lt;li&gt;Pagalms&lt;/li&gt;&lt;/ul&gt;
+&lt;script&gt;
+function mekle(teksts) {
+  const rindas = document.querySelectorAll(&quot;#saraksts li&quot;);
+  // Salīdzina mazos burtus, lai Z un z meklēšanā sakristu.
+  teksts = teksts.toLowerCase();
+  for (const rinda of rindas) {
+    rinda.hidden = !rinda.textContent.toLowerCase().includes(teksts);
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Meklēšanas lauks un trīs saraksta rindas.</p><p><strong>Izveides gaita.</strong> Izveido sarakstu. Nolasi ievadi. Ciklā pārbaudi katras rindas tekstu un maini hidden.</p><p><strong>Pārbaude.</strong> Ievadi zāl → divas rindas; xyz → neviena; notīri → visas.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="atlase-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;label&gt;Meklēt &lt;input oninput=&quot;mekle(this.value)&quot;&gt;&lt;/label&gt;&lt;ul id=&quot;saraksts&quot;&gt;&lt;li&gt;Mazā zāle&lt;/li&gt;&lt;li&gt;Lielā zāle&lt;/li&gt;&lt;li&gt;Pagalms&lt;/li&gt;&lt;/ul&gt;
+&lt;script&gt;
+function mekle(teksts) {
+  const rindas = document.querySelectorAll(&quot;#saraksts li&quot;);
+  // Salīdzina mazos burtus, lai Z un z meklēšanā sakristu.
+  teksts = teksts.toLowerCase();
+  for (const rinda of rindas) {
+    rinda.hidden = !rinda.textContent.toLowerCase().includes(teksts);
+  }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Atlasīt ierakstus — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atlasīt ierakstus&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Meklēt &lt;input id=&quot;meklet&quot; type=&quot;search&quot; oninput=&quot;atlasi()&quot;&gt;&lt;/label&gt;
+&lt;label&gt;Veids
+  &lt;select id=&quot;veids&quot; onchange=&quot;atlasi()&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Visi&lt;/option&gt;
+    &lt;option value=&quot;telpas&quot;&gt;Telpās&lt;/option&gt;
+    &lt;option value=&quot;ara&quot;&gt;Ārā&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/label&gt;
+&lt;ul id=&quot;ieraksti&quot;&gt;
+  &lt;li data-veids=&quot;telpas&quot;&gt;Mazā zāle&lt;/li&gt;
+  &lt;li data-veids=&quot;telpas&quot;&gt;Lielā zāle&lt;/li&gt;
+  &lt;li data-veids=&quot;ara&quot;&gt;Skolas pagalms&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p id=&quot;atrasti&quot; role=&quot;status&quot;&gt;Atrasti 3 ieraksti.&lt;/p&gt;
+&lt;script&gt;
+function atlasi() {
+  const teksts = document.getElementById(&quot;meklet&quot;).value.trim().toLowerCase();
+  const veids = document.getElementById(&quot;veids&quot;).value;
+  const ieraksti = document.querySelectorAll(&quot;#ieraksti li&quot;);
+  let skaits = 0;
+
+  for (const ieraksts of ieraksti) {
+    // Abiem nosacījumiem jābūt patiesiem.
+    const derTeksts = ieraksts.textContent.toLowerCase().includes(teksts);
+    const derVeids = veids === &quot;&quot; || ieraksts.dataset.veids === veids;
+    ieraksts.hidden = !(derTeksts &amp;&amp; derVeids);
+
+    if (!ieraksts.hidden) {
+      skaits += 1;
+    }
+  }
+
+  document.getElementById(&quot;atrasti&quot;).textContent =
+    &quot;Atrasti &quot; + skaits + &quot; ieraksti.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Meklēšanas lauks, kategorijas izvēlne, saraksts un rezultātu ziņojums.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija salīdzina katra ieraksta tekstu un kategoriju ar izvēlētajiem kritērijiem. Rāda tikai ierakstus, kas atbilst abiem kritērijiem.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Katram ierakstam pievieno data-veids atribūtu.</li><li>Nolasi meklējamo tekstu un izvēlēto kategoriju.</li><li>Izmanto hidden, lai paslēptu neatbilstošās rindas, un saskaiti redzamās.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Ieraksti “zāl” → 2 ieraksti.</li><li>Atstāj “zāl” un izvēlies “Ārā” → 0.</li><li>Notīri lauku un izvēlies “Visi” → 3.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Teksta un kategorijas vietā vari salīdzināt pieturu un dienas veidu vai pievienot cenas robežu.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atlasīt ierakstus&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;label&gt;Meklēt &lt;input id=&quot;meklet&quot; type=&quot;search&quot; oninput=&quot;atlasi()&quot;&gt;&lt;/label&gt;
+&lt;label&gt;Veids
+  &lt;select id=&quot;veids&quot; onchange=&quot;atlasi()&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Visi&lt;/option&gt;
+    &lt;option value=&quot;telpas&quot;&gt;Telpās&lt;/option&gt;
+    &lt;option value=&quot;ara&quot;&gt;Ārā&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/label&gt;
+&lt;ul id=&quot;ieraksti&quot;&gt;
+  &lt;li data-veids=&quot;telpas&quot;&gt;Mazā zāle&lt;/li&gt;
+  &lt;li data-veids=&quot;telpas&quot;&gt;Lielā zāle&lt;/li&gt;
+  &lt;li data-veids=&quot;ara&quot;&gt;Skolas pagalms&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p id=&quot;atrasti&quot; role=&quot;status&quot;&gt;Atrasti 3 ieraksti.&lt;/p&gt;
+&lt;script&gt;
+function atlasi() {
+  const teksts = document.getElementById(&quot;meklet&quot;).value.trim().toLowerCase();
+  const veids = document.getElementById(&quot;veids&quot;).value;
+  const ieraksti = document.querySelectorAll(&quot;#ieraksti li&quot;);
+  let skaits = 0;
+
+  for (const ieraksts of ieraksti) {
+    // Abiem nosacījumiem jābūt patiesiem.
+    const derTeksts = ieraksts.textContent.toLowerCase().includes(teksts);
+    const derVeids = veids === &quot;&quot; || ieraksts.dataset.veids === veids;
+    ieraksts.hidden = !(derTeksts &amp;&amp; derVeids);
+
+    if (!ieraksts.hidden) {
+      skaits += 1;
+    }
+  }
+
+  document.getElementById(&quot;atrasti&quot;).textContent =
+    &quot;Atrasti &quot; + skaits + &quot; ieraksti.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="kartosana">
+<header class="example-head"><h2>Kārtot pēc termiņa</h2><p>Lietotājs vēlas redzēt, kurš darbs jāveic vispirms.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Sakārto datumu masīvu no agrākā uz vēlāko.</p><iframe title="Pamata piemērs — kartosana" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;sakarto()&quot;&gt;Sakārtot datumus&lt;/button&gt;&lt;p id=&quot;datumi&quot;&gt;2027-04-02, 2027-03-12, 2027-03-19&lt;/p&gt;
+&lt;script&gt;
+function sakarto() {
+  const datumi = [&quot;2027-04-02&quot;, &quot;2027-03-12&quot;, &quot;2027-03-19&quot;];
+  // Šādā formātā teksta secība sakrīt ar datumu secību.
+  datumi.sort();
+  document.getElementById(&quot;datumi&quot;).textContent = datumi.join(&quot;, &quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un vieta sakārtotajiem datumiem.</p><p><strong>Izveides gaita.</strong> Izveido masīvu ar datumiem GGGG-MM-DD formātā. Izmanto sort un parādi rezultātu.</p><p><strong>Pārbaude.</strong> Nospied → 2027-03-12, 2027-03-19, 2027-04-02. Atkārto → tā pati secība.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="kartosana-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;sakarto()&quot;&gt;Sakārtot datumus&lt;/button&gt;&lt;p id=&quot;datumi&quot;&gt;2027-04-02, 2027-03-12, 2027-03-19&lt;/p&gt;
+&lt;script&gt;
+function sakarto() {
+  const datumi = [&quot;2027-04-02&quot;, &quot;2027-03-12&quot;, &quot;2027-03-19&quot;];
+  // Šādā formātā teksta secība sakrīt ar datumu secību.
+  datumi.sort();
+  document.getElementById(&quot;datumi&quot;).textContent = datumi.join(&quot;, &quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Kārtot pēc termiņa — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Kārtot pēc termiņa&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;sakarto()&quot;&gt;Agrākie termiņi vispirms&lt;/button&gt;
+&lt;ul id=&quot;termini&quot;&gt;
+  &lt;li data-datums=&quot;2027-04-02&quot;&gt;2. aprīlis · Nosūtīt materiālus&lt;/li&gt;
+  &lt;li data-datums=&quot;2027-03-12&quot;&gt;12. marts · Sagatavot skici&lt;/li&gt;
+  &lt;li data-datums=&quot;2027-03-19&quot;&gt;19. marts · Pārbaudīt skici&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p id=&quot;kartiba&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function sakarto() {
+  const saraksts = document.getElementById(&quot;termini&quot;);
+  const rindas = Array.from(saraksts.children);
+
+  // GGGG-MM-DD virknes var salīdzināt teksta secībā.
+  rindas.sort(function (a, b) {
+    return a.dataset.datums.localeCompare(b.dataset.datums);
+  });
+
+  // append pārvieto esošās rindas; jaunas rindas neveidojas.
+  for (const rinda of rindas) {
+    saraksts.append(rinda);
+  }
+
+  document.getElementById(&quot;kartiba&quot;).textContent = &quot;Sakārtots pēc datuma.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Poga, saraksts ar datumiem un īss paziņojums pēc kārtošanas.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija pārvērš saraksta rindas masīvā, salīdzina datumus un saliek esošās rindas jaunā secībā.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Datumu katrai rindai ieraksti formātā GGGG-MM-DD.</li><li>Ar sort sakārto rindas, salīdzinot datumu virknes.</li><li>Ar append pārvieto esošās rindas sakārtotajā secībā.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Nospied pogu → 12.03., 19.03., 02.04.</li><li>Nospied vēlreiz → secība saglabājas un ir tās pašas trīs rindas.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Rindām pievieno priekšmetu, nosaukumu vai atbildīgo. Viena datuma ieraksti saglabās savstarpējo sākotnējo secību.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Kārtot pēc termiņa&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;sakarto()&quot;&gt;Agrākie termiņi vispirms&lt;/button&gt;
+&lt;ul id=&quot;termini&quot;&gt;
+  &lt;li data-datums=&quot;2027-04-02&quot;&gt;2. aprīlis · Nosūtīt materiālus&lt;/li&gt;
+  &lt;li data-datums=&quot;2027-03-12&quot;&gt;12. marts · Sagatavot skici&lt;/li&gt;
+  &lt;li data-datums=&quot;2027-03-19&quot;&gt;19. marts · Pārbaudīt skici&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p id=&quot;kartiba&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+function sakarto() {
+  const saraksts = document.getElementById(&quot;termini&quot;);
+  const rindas = Array.from(saraksts.children);
+
+  // GGGG-MM-DD virknes var salīdzināt teksta secībā.
+  rindas.sort(function (a, b) {
+    return a.dataset.datums.localeCompare(b.dataset.datums);
+  });
+
+  // append pārvieto esošās rindas; jaunas rindas neveidojas.
+  for (const rinda of rindas) {
+    saraksts.append(rinda);
+  }
+
+  document.getElementById(&quot;kartiba&quot;).textContent = &quot;Sakārtots pēc datuma.&quot;;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="izskats">
+<header class="example-head"><h2>Mainīt izskatu</h2><p>Lietotājs vēlas pamanīt, ar kuru pogu var mijiedarboties, un izvēlēties kartītes fonu.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Katrs klikšķis pārslēdz kartītes fona un teksta krāsu.</p><iframe title="Pamata piemērs — izskats" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } #kartite { background: #eee8ff; padding: 10px; } .tumsa { background: #28213f !important; color: white; }&lt;/style&gt;
+&lt;body&gt;
+&lt;div id=&quot;kartite&quot;&gt;&lt;p&gt;Pasākums 16.30&lt;/p&gt;&lt;button onclick=&quot;mainiFonu()&quot;&gt;Mainīt fonu&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;
+function mainiFonu() {
+  // toggle pievieno klasi vai noņem to.
+  document.getElementById(&quot;kartite&quot;).classList.toggle(&quot;tumsa&quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga, kartīte un divi CSS klases noteikumi.</p><p><strong>Izveides gaita.</strong> Izveido kartīti. CSS apraksti tumšo klasi. Funkcijā izmanto classList.toggle.</p><p><strong>Pārbaude.</strong> Nospied divreiz → tumšs fons un tad sākotnējais fons.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="izskats-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } #kartite { background: #eee8ff; padding: 10px; } .tumsa { background: #28213f !important; color: white; }&lt;/style&gt;
+&lt;body&gt;
+&lt;div id=&quot;kartite&quot;&gt;&lt;p&gt;Pasākums 16.30&lt;/p&gt;&lt;button onclick=&quot;mainiFonu()&quot;&gt;Mainīt fonu&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;
+function mainiFonu() {
+  // toggle pievieno klasi vai noņem to.
+  document.getElementById(&quot;kartite&quot;).classList.toggle(&quot;tumsa&quot;);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Mainīt izskatu — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Mainīt izskatu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+.kartite { padding: 12px; background: #ede9ff; color: #24234a; }
+.kartite.tumsa { background: #252044; color: white; }
+#rezims:hover, #rezims:focus-visible {
+  outline: 3px solid #9975ed;
+  outline-offset: 3px;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;kartite&quot; class=&quot;kartite&quot;&gt;
+  &lt;p&gt;Pasākuma sākums 16.30&lt;/p&gt;
+  &lt;button id=&quot;rezims&quot; onclick=&quot;mainiFonu()&quot; aria-pressed=&quot;false&quot;&gt;
+    Tumšais fons
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function mainiFonu() {
+  const kartite = document.getElementById(&quot;kartite&quot;);
+  const poga = document.getElementById(&quot;rezims&quot;);
+
+  // toggle atgriež true, ja klase pēc darbības ir pievienota.
+  const tumss = kartite.classList.toggle(&quot;tumsa&quot;);
+  poga.setAttribute(&quot;aria-pressed&quot;, String(tumss));
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Poga, kartīte un CSS noteikumi hover, focus-visible un alternatīvajai klasei.</p>
+    <h3>Funkcijas darbība</h3><p>CSS iezīmē pogu, kad uz tās ir kursors vai tastatūras fokuss. Klikšķis izsauc funkciju, kas pārslēdz kartītes klasi un atjauno pogas stāvokli.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Ar CSS apraksti kartītes parasto un tumšo izskatu.</li><li>Ar :hover un :focus-visible iezīmē pogu.</li><li>Ar classList.toggle pārslēdz kartītes klasi.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Uzved kursoru uz pogas → parādās kontūra.</li><li>Ar Tab pārej uz pogu → redzama tā pati kontūra.</li><li>Nospied Enter vai klikšķini divreiz → kartīte aptumšojas un tad atgūst sākotnējo izskatu.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Klases maiņu vari izmantot arī izvēlēta ieraksta izcelšanai. Svarīgam statusam pievieno arī tekstu.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Mainīt izskatu&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+.kartite { padding: 12px; background: #ede9ff; color: #24234a; }
+.kartite.tumsa { background: #252044; color: white; }
+#rezims:hover, #rezims:focus-visible {
+  outline: 3px solid #9975ed;
+  outline-offset: 3px;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;kartite&quot; class=&quot;kartite&quot;&gt;
+  &lt;p&gt;Pasākuma sākums 16.30&lt;/p&gt;
+  &lt;button id=&quot;rezims&quot; onclick=&quot;mainiFonu()&quot; aria-pressed=&quot;false&quot;&gt;
+    Tumšais fons
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function mainiFonu() {
+  const kartite = document.getElementById(&quot;kartite&quot;);
+  const poga = document.getElementById(&quot;rezims&quot;);
+
+  // toggle atgriež true, ja klase pēc darbības ir pievienota.
+  const tumss = kartite.classList.toggle(&quot;tumsa&quot;);
+  poga.setAttribute(&quot;aria-pressed&quot;, String(tumss));
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<article id="detalas">
+<header class="example-head"><h2>Atvērt papildu informāciju</h2><p>Lietotājs vēlas ātri apskatīt konkrēta temata norādi un to atkal sakļaut.</p></header>
+<div class="example-content"><section class="beginner"><h3>Pamata piemērs</h3><p>Klikšķis pārslēdz papildu informācijas redzamību.</p><iframe title="Pamata piemērs — detalas" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;parsledz()&quot;&gt;Rādīt / paslēpt norādi&lt;/button&gt;&lt;p id=&quot;norade&quot; hidden&gt;Ieeja no pagalma.&lt;/p&gt;
+&lt;script&gt;
+function parsledz() {
+  const norade = document.getElementById(&quot;norade&quot;);
+  // ! apgriež true uz false un false uz true.
+  norade.hidden = !norade.hidden;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><p><strong>Lapas elementi.</strong> Poga un sākumā paslēpta rindkopa.</p><p><strong>Izveides gaita.</strong> Izveido tekstu ar hidden. Funkcijā apgriez hidden vērtību ar !.</p><p><strong>Pārbaude.</strong> Pirmais klikšķis → norāde redzama; otrais → paslēpta.</p><details class="sample"><summary>Skatīt un iegūt kodu</summary><div class="code-actions"><button class="copy">Kopēt kodu</button><button class="download" data-name="detalas-pamata">Lejupielādēt paraugu</button><span role="status"></span></div><pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Vienkāršs piemērs&lt;/title&gt;
+&lt;style&gt;body { font: 16px system-ui; padding: 12px; } button, input { font: inherit; margin: 4px; } &lt;/style&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;parsledz()&quot;&gt;Rādīt / paslēpt norādi&lt;/button&gt;&lt;p id=&quot;norade&quot; hidden&gt;Ieeja no pagalma.&lt;/p&gt;
+&lt;script&gt;
+function parsledz() {
+  const norade = document.getElementById(&quot;norade&quot;);
+  // ! apgriež true uz false un false uz true.
+  norade.hidden = !norade.hidden;
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details><p>Salīdzini ar pilno paraugu zemāk un izvēlies savai vajadzībai piemērotās darbības.</p></section>
+  <section class="demo"><h3>Izmēģini</h3>
+    <iframe title="Atvērt papildu informāciju — demonstrācija" sandbox="allow-scripts" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atvērt papildu informāciju&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button id=&quot;detaluPoga&quot; onclick=&quot;mainiDetalas()&quot;
+        aria-expanded=&quot;false&quot; aria-controls=&quot;detalas&quot;&gt;
+  Rādīt norādi
+&lt;/button&gt;
+&lt;div id=&quot;detalas&quot; hidden&gt;
+  &lt;p&gt;Ieeja no pagalma. Pēc kāpnēm pagriezies pa kreisi.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function mainiDetalas() {
+  const bloks = document.getElementById(&quot;detalas&quot;);
+  const poga = document.getElementById(&quot;detaluPoga&quot;);
+
+  // Apgriež pašreizējo redzamības stāvokli.
+  bloks.hidden = !bloks.hidden;
+  poga.textContent = bloks.hidden ? &quot;Rādīt norādi&quot; : &quot;Paslēpt norādi&quot;;
+  poga.setAttribute(&quot;aria-expanded&quot;, String(!bloks.hidden));
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </section>
+  <section class="notes"><h3>Lapas elementi</h3><p>Poga ar aria-expanded, satura bloks ar hidden un saite, ja tā vajadzīga.</p>
+    <h3>Funkcijas darbība</h3><p>Funkcija pārslēdz satura bloka redzamību un atjauno pogas uzrakstu un izvēršanas stāvokli.</p>
+  </section>
+  <section class="notes"><h3>Izveides gaita</h3><ol><li>Izveido pogu un sākumā paslēptu bloku.</li><li>Uzraksti funkciju, kas maina hidden vērtību.</li><li>Sinhronizē pogas tekstu un aria-expanded ar bloka redzamību.</li></ol>
+    <h3>Kā pārbaudīt</h3><ol><li>Atver lapu → informācija paslēpta.</li><li>Nospied pogu → informācija redzama.</li><li>Nospied vēlreiz → informācija paslēpta.</li></ol>
+  </section>
+  <p class="adapt"><strong>Pielāgo savai lomai.</strong> Blokā vari parādīt ierašanās norādes, kontaktpersonu vai video tematu ar laika atzīmi un saiti.</p>
+  <details><summary>Pilnā parauga HTML, CSS un JavaScript kods</summary>
+    <div class="code-actions"><button type="button" class="copy">Kopēt kodu</button>
+      <button type="button" class="download">Lejupielādēt paraugu</button>
+      <span role="status"></span>
+    </div>
+    <pre tabindex="0"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;lv&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Atvērt papildu informāciju&lt;/title&gt;
+&lt;style&gt;
+body { font: 16px/1.5 system-ui, sans-serif; color: #20223b; margin: 16px; }
+button, input, select { font: inherit; padding: .35em .65em; }
+button { cursor: pointer; }
+label { display: block; margin: .3em 0; }
+output { padding: 0 .35em; font-weight: bold; }
+
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button id=&quot;detaluPoga&quot; onclick=&quot;mainiDetalas()&quot;
+        aria-expanded=&quot;false&quot; aria-controls=&quot;detalas&quot;&gt;
+  Rādīt norādi
+&lt;/button&gt;
+&lt;div id=&quot;detalas&quot; hidden&gt;
+  &lt;p&gt;Ieeja no pagalma. Pēc kāpnēm pagriezies pa kreisi.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function mainiDetalas() {
+  const bloks = document.getElementById(&quot;detalas&quot;);
+  const poga = document.getElementById(&quot;detaluPoga&quot;);
+
+  // Apgriež pašreizējo redzamības stāvokli.
+  bloks.hidden = !bloks.hidden;
+  poga.textContent = bloks.hidden ? &quot;Rādīt norādi&quot; : &quot;Paslēpt norādi&quot;;
+  poga.setAttribute(&quot;aria-expanded&quot;, String(!bloks.hidden));
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </details>
+</div>
+</article>
+<section class="panel" id="resursi">
+  <h2>Mācību resursi</h2>
+  <ul>
+    <li><a href="https://www.w3schools.com/js/js_functions.asp">W3Schools · JavaScript funkcijas</a></li>
+    <li><a href="https://www.w3schools.com/js/js_htmldom_events.asp">W3Schools · HTML elementu notikumi</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events">MDN · Ievads notikumos</a></li>
+  </ul>
+</section>
+</main>
+</div>
+<footer class="wrap">Paraugu izvēlei izmantots mācību materiāls “Lomu spēle”, 6.–25. lpp.</footer>
+<script>
+for (const sadaļa of document.querySelectorAll("details")) {
+  const kods = sadaļa.querySelector("code");
+  const ziņa = sadaļa.querySelector(".code-actions [role=status]");
+
+  sadaļa.querySelector(".copy").addEventListener("click", async function () {
+    try {
+      await navigator.clipboard.writeText(kods.textContent);
+      ziņa.textContent = "Kods nokopēts.";
+    } catch {
+      ziņa.textContent = "Atlasīts kods. Kopē ar Ctrl+C vai ⌘C.";
+      const diapazons = document.createRange();
+      diapazons.selectNodeContents(kods);
+      const atlase = window.getSelection();
+      atlase.removeAllRanges();
+      atlase.addRange(diapazons);
+    }
+  });
+
+  sadaļa.querySelector(".download").addEventListener("click", function () {
+    const fails = new Blob([kods.textContent], { type: "text/html;charset=utf-8" });
+    const adrese = URL.createObjectURL(fails);
+    const saite = document.createElement("a");
+    saite.href = adrese;
+    saite.download = (sadaļa.querySelector(".download").dataset.name || sadaļa.closest("article").id) + ".html";
+    saite.click();
+    setTimeout(function () { URL.revokeObjectURL(adrese); }, 1000);
+    ziņa.textContent = "Paraugs sagatavots lejupielādei.";
+  });
+}
+</script>
+</body>
+</html>
